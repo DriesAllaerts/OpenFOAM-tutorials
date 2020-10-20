@@ -1,0 +1,59 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.0.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root            "";
+    case            "";
+    instance        "";
+    local           "";
+
+    class           dictionary;
+    object          setFieldsABLDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include        "../setUp"
+
+
+// Extents of the domain.
+xMin                      $xMin;
+yMin                      $yMin;
+zMin                      $zMin;
+
+xMax                      $xMax;
+yMax                      $yMax;
+zMax                      $zMax;
+
+// Specify if distance from wall should be used as z.
+useWallDistZ              false;
+scaleVelocityWithHeight   false;
+
+// Specify how to initialze the base velocity and temperature profile.
+velocityInitType          "table";
+temperatureInitType       "table";
+
+// Vertical profile table.
+profileTable
+(
+//   z          U       V        T
+    (0.0 10.0 0.0 290.0)
+    (2000.0 10.0 0.0 310.0)
+);
+
+// Update internal field.
+updateInternalFields      true;
+
+// Update boundary field.
+updateBoundaryFields      false;
+
+// ************************************************************************* //

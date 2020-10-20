@@ -1,0 +1,96 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.6                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+    application         steadySolverWithoutTurbine;
+
+    libs                ("libJULIAincompressibleTurbulenceModels.so"
+                         "libatmosphericModels.so"
+                         "libSOWFAfileFormats.so"
+ 		                 "libutilityFunctionObjects.so");
+
+    startFrom           startTime;
+
+    startTime           0.0;
+
+    stopAt              endTime;
+
+    endTime             20000.0;
+
+    deltaT              1;
+    
+    writeControl        timeStep;
+
+    writeInterval       1000;
+
+    purgeWrite          2;
+
+    writeFormat         ascii;
+
+    writePrecision      12;
+
+    writeCompression    uncompressed;
+
+    timeFormat          general;
+
+    timePrecision       12;
+
+    runTimeModifiable   yes;
+
+    adjustTimeStep      no;
+
+    maxCo               0.75;
+
+    maxDeltaT           25.0;
+
+    functions
+    {
+        residuals
+        {
+            type               residuals;
+            writeControl       timeStep;
+            writeInterval      1;
+            writeFields        true;	
+            fields
+            (
+                U
+                T
+                k
+                epsilon
+                p_rgh
+            );
+        }
+        planarAveraging
+        {
+            type                 planarAveraging;
+            functionObjectLibs   ("libSOWFAfieldFunctionObjects.so");
+            enabled              true;
+            writeControl         timeStep;
+            writeInterval        1;
+            fields
+            (
+                U
+                T
+                k
+                epsilon
+                nut
+                kappat
+            );
+        }
+    }
+
+// ************************************************************************* //
+

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd ${0%/*} || exit 1                            # Run from this directory
+
+blockMesh > log.blockMesh 2>&1                  # Create the mesh
+
+setFieldsABL > log.setFieldsABL 2>&1            # Initialize U and T profiles
+
+steadySolverWithoutTurbine > log.solver 2>&1    # Run application

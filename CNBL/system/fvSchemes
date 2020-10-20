@@ -1,0 +1,101 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+ddtSchemes
+{
+    default         steadyState; //Euler; //CrankNicolson 0.9; //.backward; //Euler;
+}
+
+gradSchemes
+{
+    default           Gauss linear;
+    grad(U) 	      cellLimited Gauss linear 1.0;
+    grad(T) 	      cellLimited Gauss linear 1.0;
+}
+
+divSchemes
+{
+    default           none; //bounded Gauss linear;
+    div(phi,U)        bounded Gauss linearUpwindV grad(U);
+    div(phi,T)        bounded Gauss linearUpwind grad(T);
+    div(phi,k)        bounded Gauss upwind;
+    div(phi,epsilon)  bounded Gauss upwind;
+    div(phi,R)        bounded Gauss upwind;
+    div(R)            Gauss linear;
+    div((nuEff*dev(T(grad(U))))) Gauss linear; //Gauss linear;
+    div(Rwall)        Gauss linear;
+    div(qwall)	      Gauss linear;
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected; //Gauss linear limited 1.0; //Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         corrected; //limited 0.5; //corrected;
+}
+
+fluxRequired
+{
+    default         no;
+    p_rgh           ;
+}
+
+schemeBlending
+{
+
+    // Table of blending factors vs. cell face size.
+    faceSizeBlendingTable
+    (
+    // area          U        T
+        (0.096      0.996  0.980 )
+        (0.39       0.996  0.980 )
+        (1.563      0.997  0.985 )
+        (6.25       0.998  0.990 )
+        (25         0.999  0.995 )
+        (100        1.000  1.000 )
+        (1E6        1.000  1.000 )
+    );
+
+
+    // Height above which blending factor begins to transition
+    // from heightBlendingFactor_z1 to heightBlendingFactor_z2.
+    heightBlending_z1            800; //0.368; //800.0;
+
+    // Height above which blending factor is heightBlendingFactor_z2.
+    heightBlending_z2            1000; //0.45; //1000.0;
+
+
+    heightBlendingFactorU_z1     1.0;
+    heightBlendingFactorU_z2     0.9;
+
+    heightBlendingFactorT_z1     1.0;
+    heightBlendingFactorT_z2     0.9;
+
+
+    // In calculating height, use wall distance or absolute distance.
+    useWallDistZ                 false;
+}
+
+// ************************************************************************* //
