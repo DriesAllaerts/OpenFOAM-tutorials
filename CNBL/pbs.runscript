@@ -1,0 +1,20 @@
+#!/bin/bash
+: mail address
+#PBS -M D.J.N.Allaerts-1@tudelft.nl
+: mail options
+#PBS -m abe
+: redirect stderror to stdoutput
+#PBS -joe
+: job name
+#PBS -N CNBL
+: resource list
+#PBS -l walltime=4:00:00,nodes=1:ppn=1:typef
+: queue name
+#PBS -q awep-test
+
+source $HOME/.bash_profile
+OpenFOAM-6-env jsteiner
+
+cd $PBS_O_WORKDIR
+
+./Allrun
